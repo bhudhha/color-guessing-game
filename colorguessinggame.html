@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Color Game</title>
+	<style >
+		body{
+	background-color: #232323;
+	margin: 0;
+	font-family: "Montserrat","Avenir";
+}
+.square{
+	width: 30%;
+	background: purple;
+	padding-bottom: 30%;
+	float: left;
+	margin: 1.66%;
+	border-radius: 15%;
+	transition: background 0.8s;
+	-webkit-transition: background 0.8s;
+	-moz-transition :background 0.8s;
+
+}
+#container{
+	margin: 20px auto;
+	max-width: 600px;
+
+}
+h1{
+	text-align: center;
+	line-height: 1.1;
+	font-weight: normal;
+	color: white;
+	background:steelblue;
+	margin: 0;
+	text-transform: uppercase;
+	padding: 20px 0;
+
+}
+#colorDisplay{
+	font-size: 200%;
+}
+#message{
+	display: inline-block;
+	width: 20%;
+}
+
+#stripe{
+background:white;
+height: 30%;
+text-align: center;
+color: black;
+}
+.selected{
+	background:blue;
+}
+button{
+	border:none;
+	background :none;
+	text-transform: uppercase;
+	height: 100%;
+	font-weight:700;
+	color: steelblue;
+	letter-spacing: 1px;
+	font-size: inherit;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition :all 0.5s;
+	outline: none;
+}
+button:hover{
+	color: white;
+	background: steelblue;
+}
+	</style>
+</head>
+<body>
+	<h1>
+		The Great
+<br>
+		 <span id="colorDisplay">RGB</span> 
+<br>
+		Color Game
+	</h1>
+	<div id="stripe">
+		<button id="reset">New Colors</button>
+		<span id="message"></span>
+		<button id="easyBtn">Easy</button>
+		<button id="hardBtn" class="selected">Hard</button>
+	</div>
+	<div id="container">
+	    <div class="square"></div>
+	    <div class="square"></div>
+	    <div class="square"></div>
+	    <div class="square"></div>
+	    <div class="square"></div>
+	    <div class="square"></div>
+    </div>
+    <script>
+    	var numSquare=6;
+var color =generateRandomColors(numSquare);
+var square = document.querySelectorAll(".square");
+var pickedcolor = pickcolor();
+var colorDisplay = document.getElementById("colorDisplay");
+var messageDisplay = document.getElementById("message");
+var h1 = document.querySelector("h1");
+var resetButton = document.getElementById("reset");
+var easyBtn = document.getElementById("easyBtn");
+var hardBtn = document.getElementById("hardBtn");
+
+
+easyBtn.addEventListener("click",function(){
+	hardBtn.classList.remove("selected");
+	easyBtn.classList.add("selected");
+	numSquare=3;
+	color = generateRandomColors(numSquare);
+	pickedcolor=pickcolor();
+	colorDisplay.textContent=pickedcolor;
+	for(var i=0; i<square.length;i++){
+		if(color[i]){
+			square[i].style.background=color[i];
+		}else{
+			square[i].style.display="none";
+		}
+	}
+});
+hardBtn.addEventListener("click",function(){
+hardBtn.classList.add("selected");
+	easyBtn.classList.remove("selected");
+	numSquare=6;
+	color = generateRandomColors(numSquare);
+	pickedcolor=pickcolor();
+	colorDisplay.textContent=pickedcolor;
+	for(var i=0; i<square.length;i++){
+			square[i].style.background=color[i];
+		
+		    square[i].style.display ="block";
+	}
+});
+
+resetButton.addEventListener("click",function(){
+	//generate all new color 
+	color =generateRandomColors(numSquare);
+	//pick a new random color from array
+	pickedcolor = pickcolor();
+	// change colorDiplay to match picked;
+	colorDisplay.textContent=pickedcolor;
+	this.textContent="New Colors"
+	messageDisplay.textContent="";
+	//change colors of square
+	for(var i=0 ; i<square.length;i++){
+		square[i].style.background= color[i];
+	}
+	h1.style.background="steelblue";
+});
+colorDisplay.textContent= pickedcolor;
+for (var i=0 ;i< square.length; i++) {
+	//add initial colors to squares
+	square[i].style.background = color[i];
+	//add click listener to squares
+	square[i].addEventListener("click",function(){
+		//grab color of clicked square
+		var clickedcolor = this.style.background;
+		//compare color to pickedcolor
+		if(clickedcolor===pickedcolor){
+			messageDisplay.textContent="Correct";
+			resetButton.textContent="Play Again";
+			changeColors(clickedcolor);
+			h1.style.background=clickedcolor;
+		}else{
+			this.style.background="#232323";
+			messageDisplay.textContent="Try Again";
+		}
+	});
+}
+function changeColors(colors){
+	for( var i=0; i<square.length;i++){
+		square[i].style.background=colors;
+	}
+}
+
+function pickcolor(){
+	var random = Math.floor(Math.random()*color.length);
+	return color[random];
+}
+function generateRandomColors(num){
+	var arr=[];
+	for(i=0;i<num;i++){
+arr.push(randomColor());
+
+	}
+	return arr;
+}
+function randomColor(){
+//pick a red from 0 to 255
+var r = Math.floor(Math.random()*256);
+//pick a green from 0 to 255
+var g = Math.floor(Math.random()*256);
+//pick a blue from 0 to 255
+var b = Math.floor(Math.random()*256);
+return "rgb(" + r + ", " + g + ", " + b + ")";
+}
+    </script>
+</body>
+</html>
